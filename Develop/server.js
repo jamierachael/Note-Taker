@@ -18,10 +18,10 @@ const PORT = process.env.PORT || 8080;
 //     response.send("Test!");
 // })
 
-// Get/notes - needs to return notes.html (?)
+// Get/notes - needs to return notes.html
 
 app.get("/notes", (request, response) => {
-    response.sendFile(path.join(__dirname, "..", "..", "notes.html"));
+    response.sendFile(path.join(__dirname, "public", "notes.html"));
     console.log("Your Notes!");
 
 })
@@ -30,7 +30,7 @@ app.get("/notes", (request, response) => {
 
 app.get("/", (request, response) => {
     // response.sendFile(path.join(__dirname, "..", "..", "index.html"));
-    response.sendFile(path.join(__dirname, "index.html"));
+    response.sendFile(path.join(__dirname, "public", "index.html"));
     console.log("Your index!");
 })
 
@@ -41,22 +41,16 @@ app.get("/", (request, response) => {
 app.get("/api/notes", (request, response) => {
     // Read in file and loop through it
 
-    fs.readFile(path.join(__dirname, "..", "..", "..", "db.json"), function (err, data) {
-        //     res.writeHead(200, {'Content-Type': 'text/html'});
-        //     res.write(data);
-        //     res.end();
-        //   });
-
+    fs.readFile(path.join(__dirname, "db", "db.json"), function (err, data) {
+        let notes = data;
+        return response.json(notes);
+        // Send method
+        // Returns numerical data
         console.log("API Notes!");
     })
 })
 
-// http.createServer(function (req, res) {
-//     fs.readFile('demofile1.html', function(err, data) {
-//       res.writeHead(200, {'Content-Type': 'text/html'});
-//       res.write(data);
-//       res.end();
-//     });
+
 
 // POST /api/notes -  Should recieve a new note to save on the request body, add it to the db.json file, and then return the new note to the client.
 
