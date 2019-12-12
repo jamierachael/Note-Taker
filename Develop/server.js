@@ -25,6 +25,7 @@ const PORT = process.env.PORT || 8080;
 // })
 
 // Do we need this? 
+// Might need a server call for styles.css and index.js
 // // Read file needed for notes.html?
 // fs.readFile("public/notes.html", "utf8", function (error, data) {
 
@@ -62,26 +63,27 @@ app.get("/", (request, response) => {
 // Should read the db.json file and return all saved notes as JSON.db
 // How?
 
+// Working, console logs object 
 app.get("/api/notes", (request, response) => {
-    // Read in file and loop through it
 
-    fs.readFile(path.join(__dirname, "db", "db.json"), function (err, data) {
-        let notes = data;
-        return response.json(notes);
-        // Send method
-        // Returns numerical data
-        console.log("API Notes!");
-        // How to use node-json-db?
+    fs.readFile(path.join(__dirname, "db", "db.json"), 'utf8', (err, jsonString) => {
+        if (err) {
+            console.log("File read failed:", err)
+            return
+        }
+        console.log('File data:', jsonString)
     })
 })
 
 
 // POST /api/notes -  Should recieve a new note to save on the request body, add it to the db.json file, and then return the new note to the client.
 
-app.post(".api/notes", function (request, response) {
-    // Is this neccessary ? 
-    // var newNote = request.body;
+app.post("/api/notes", function (request, response) {
+    //     // Is this neccessary ? 
+    //     // var newNote = request.body;
     // res.send('POST request to the note page!')
+    var db = new JsonDB(new Config("myDataBase", true, false, '/'));
+    console.log("Api notes" + db);
 
 });
 
