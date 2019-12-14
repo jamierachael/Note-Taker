@@ -1,48 +1,22 @@
 const express = require("express");
 const app = express();
 const fs = require("fs");
+// - needs for path.join
 const path = require("path");
 var http = require("http");
-var JsonDB = require("node-json-db");
-
-// For node-JSON-db
-// Installed this: 
-// https://www.npmjs.com/package/node-json-db
-
-// - needs for path.join 
 
 const PORT = process.env.PORT || 8080;
 
 // Sets up the Express app to handle data parsing
-// Is this neccessary? 
 
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public"));
 
 // Test 
 // app.get("/", (request, response) => {
 //     response.send("Test!");
 // })
-
-// Do we need this? 
-// Might need a server call for styles.css and index.js
-// // Read file needed for notes.html?
-// fs.readFile("public/notes.html", "utf8", function (error, data) {
-
-//     if (error) {
-//         return console.log(error);
-//     }
-//     console.log(data);
-// });
-
-// // Read file needed for index.html?
-// fs.readFile("public/index.html", "utf8", function (error, data) {
-
-//     if (error) {
-//         return console.log(error);
-//     }
-//     console.log(data);
-// });
 
 // Get/notes - needs to return notes.html
 app.get("/notes", (request, response) => {
@@ -52,7 +26,6 @@ app.get("/notes", (request, response) => {
 })
 
 // Get * - needs to return index.html (?)
-
 app.get("/", (request, response) => {
     // response.sendFile(path.join(__dirname, "..", "..", "index.html"));
     response.sendFile(path.join(__dirname, "public", "index.html"));
@@ -61,9 +34,9 @@ app.get("/", (request, response) => {
 
 // GET /api/notes
 // Should read the db.json file and return all saved notes as JSON.db
-// How?
 
 // Working, console logs object 
+// In class example response.json(response);
 app.get("/api/notes", (request, response) => {
 
     fs.readFile(path.join(__dirname, "db", "db.json"), 'utf8', (err, jsonString) => {
@@ -72,26 +45,68 @@ app.get("/api/notes", (request, response) => {
             return
         }
         console.log('File data:', jsonString)
+        response.json(JSON.parse(jsonString));
+        // json.parse
     })
 })
 
 
 // POST /api/notes -  Should recieve a new note to save on the request body, add it to the db.json file, and then return the new note to the client.
 
+// Test 
+
+// var noteText = require("../data/waitinglistData");
+// NOt yet working
 app.post("/api/notes", function (request, response) {
-    //     // Is this neccessary ? 
-    //     // var newNote = request.body;
-    // res.send('POST request to the note page!')
-    var db = new JsonDB(new Config("myDataBase", true, false, '/'));
-    console.log("Api notes" + db);
+
+    fs.readFile(path.join(__dirname, "db", "db.json"), 'utf8', (err, jsonString) => {
+        if (err) {
+            console.log("File read failed:", err)
+            return
+        }
+        console.log('File data:', jsonString);
+        // json.parse
+        // var obj = JSON.parse('{ "title:", "text:"}');
+        // var obj = JSON.parse(jsonString);
+        // add json to array - restring
+        var notes = JSON.parse(jsonString);
+
+
+        const newNote = {
+            title: request.body.title,
+            text: request.body.text,
+            // id: //some code to generate an id
+            // Github code 
+            id: Math.random().toString(36).substr(2, 9)
+        };
+        // Error with JSON.parse
+
+        console.log(newNote);
+        // array
+        let noteText = [];
+        notes.push(newNote);
+        let NotesJSON = JSON.stringify(notes);
+        // push to array 
+        // then stringify 
+
+        fs.writeFile(path.join(__dirname, "db", "json.db"), NotesJSON, (err) => {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("Success!", NotesJSON);
+            return NotesJSON;
+        });
+
+    })
 
 });
+
 
 // DELETE /api/notes/:id 
 //  Should recieve a query paramter containing the id of a note to delete. This means you'll need to find a way to give each note a unique id when it's saved. In order to delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
 
 // app.delete("/api/notes/:id", function (req, res) {
-//   res.send('DELETE notes!')
+//   response.send('DELETE notes!')
 // })
 
 
