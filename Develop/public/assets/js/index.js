@@ -97,7 +97,6 @@ var handleNewNoteView = function () {
 // Or else show it
 var handleRenderSaveBtn = function () {
   if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
-    // if (!$noteTitle.val() || !$noteText.val()) {
     $saveNoteBtn.hide();
   } else {
     $saveNoteBtn.show();

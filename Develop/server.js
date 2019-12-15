@@ -66,33 +66,30 @@ app.post("/api/notes", function (request, response) {
         }
         console.log('File data:', jsonString);
         // json.parse
-        // var obj = JSON.parse('{ "title:", "text:"}');
-        // var obj = JSON.parse(jsonString);
-        // add json to array - restring
         var notes = JSON.parse(jsonString);
 
-
+        // Note object 
         const newNote = {
             title: request.body.title,
             text: request.body.text,
-            // id: //some code to generate an id
             // Github code 
             id: Math.random().toString(36).substr(2, 9)
         };
-        // Error with JSON.parse
 
-        console.log(newNote);
+        // console.log(newNote);
         // array
-        let noteText = [];
+        // let noteText = [];
         notes.push(newNote);
+        // Will not push to newNote
         let NotesJSON = JSON.stringify(notes);
         // push to array 
         // then stringify 
 
-        fs.writeFile(path.join(__dirname, "db", "json.db"), NotesJSON, (err) => {
+        fs.writeFile(path.join(__dirname, "db", "db.json"), NotesJSON, (err) => {
             if (err) {
                 return console.log(err);
             }
+            // this is console logging
             console.log("Success!", NotesJSON);
             return NotesJSON;
         });
@@ -105,13 +102,47 @@ app.post("/api/notes", function (request, response) {
 // DELETE /api/notes/:id 
 //  Should recieve a query paramter containing the id of a note to delete. This means you'll need to find a way to give each note a unique id when it's saved. In order to delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
 
-// app.delete("/api/notes/:id", function (req, res) {
-//   response.send('DELETE notes!')
-// })
+// Internal Server Error
+app.delete('/api/notes/:id', function (request, response) {
+
+    console.log(request);
+    // set request to variable 
+    // set request id
+
+    fs.readFile(path.join(__dirname, "db", "db.json"), 'utf8', (err, jsonString) => {
+        if (err) {
+            return console.log(err);
+        }
+        // jsonString.forEach(function (item) {
+
+        // Look up express api delete array 
+
+        // if statement, find id that matches id route 
+        //     if (item.id = )
+        //     // delete Employee.firstname;
+
+        // })
+
+        // Longer way, getting index of object and Id, from Json String you would slice method 
+        // Tell it position 
+        // say how far to go (which is one) 
+
+        response.send('DELETE notes!')
+        // });
+
+        fs.writeFile(path.join(__dirname, "db", "db.json"), NotesJSON, (err) => {
 
 
-// Server listening confirmation
-app.listen(PORT, () => {
-    console.log(`Server is listening on PORT ${PORT}`);
-});
+            if (err) {
+                return console.log(err);
+            }
+            console.log(NotesJSON);
+            return NotesJSON;
+        });
+    });
+
+    // Server listening confirmation
+    app.listen(PORT, () => {
+        console.log(`Server is listening on PORT ${PORT}`);
+    });
 
