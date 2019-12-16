@@ -4,7 +4,7 @@ Note Taker App using express js
 
 
 * ['Note-Taker - Git Hub'](https://github.com/jamierachael/Note-Taker)
-* ['DNote-Taker - Git Hub IO'](https://jamierachael.github.io/Note-Taker/)
+* ['Note-Taker - Git Hub IO'](https://jamierachael.github.io/Note-Taker/)
 * ['Note-Taker - Demo Video'](https://drive.google.com/file/d/11pPBPW3RhpZX4lH-pgMqnsVJGMrA0VXR/view)
 
 
