@@ -105,44 +105,56 @@ app.post("/api/notes", function (request, response) {
 // Internal Server Error
 app.delete('/api/notes/:id', function (request, response) {
 
-    console.log(request);
+    // console.log(request);
+    // if (err) {
+    //     console.log("Delete failed:", err)
+    // }
+
+
     // set request to variable 
     // set request id
 
     fs.readFile(path.join(__dirname, "db", "db.json"), 'utf8', (err, jsonString) => {
         if (err) {
-            return console.log(err);
+            console.log("File read failed:", err)
+            return
         }
-        // jsonString.forEach(function (item) {
+        console.log('File data:', jsonString);
+        // json.parse
+        var notes = JSON.parse(jsonString);
 
-        // Look up express api delete array 
+        // Note object 
+        const newNote = {
+            title: request.body.title,
+            text: request.body.text,
+            // Github code 
+            id: Math.random().toString(36).substr(2, 9)
+        };
 
-        // if statement, find id that matches id route 
-        //     if (item.id = )
-        //     // delete Employee.firstname;
-
-        // })
-
-        // Longer way, getting index of object and Id, from Json String you would slice method 
-        // Tell it position 
-        // say how far to go (which is one) 
-
-        response.send('DELETE notes!')
-        // });
+        // console.log(newNote);
+        // array
+        // let noteText = [];
+        notes.splice(request.params.id, 1);
+        // notes.push(newNote);
+        // Will not push to newNote
+        let NotesJSON = JSON.stringify(notes);
+        // push to array 
+        // then stringify 
 
         fs.writeFile(path.join(__dirname, "db", "db.json"), NotesJSON, (err) => {
-
-
             if (err) {
                 return console.log(err);
             }
-            console.log(NotesJSON);
+            // this is console logging
+            console.log("Success!", NotesJSON);
             return NotesJSON;
         });
-    });
 
-    // Server listening confirmation
-    app.listen(PORT, () => {
-        console.log(`Server is listening on PORT ${PORT}`);
-    });
+    })
+
+});
+// Server listening confirmation
+app.listen(PORT, () => {
+    console.log(`Server is listening on PORT ${PORT}`);
+});
 
